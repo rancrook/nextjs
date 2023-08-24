@@ -1,5 +1,6 @@
+import axios from 'axios';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function Item({ key, description, handleDelete }) {
   return (
@@ -30,6 +31,13 @@ export default function Todo() {
       todoList.filter((item) => id !== item.id)
     );
   }
+
+  useEffect(() => {
+    axios.get('/api/items')
+      .then((response) => {
+        console.log(response.data);
+      })
+  }, []);
 
   return (
     <>
