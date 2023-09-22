@@ -6,10 +6,7 @@ module.exports = {
 
     config.plugins.push(
       new NextFederationPlugin({
-        name: 'next2',
-        remotes: {
-          next1: `next1@http://localhost:3001/_next/static/${isServer ? 'ssr' : 'chunks'}/remoteEntry.js`,
-        },
+        name: 'ranjs',
         filename: 'static/chunks/remoteEntry.js',
         exposes: {
           './ToDo': './components/ToDo.js'
