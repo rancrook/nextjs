@@ -32,6 +32,12 @@ export default function ToDo() {
 
   return (
     <>
+      <h1>
+        To-Do List
+      </h1>
+
+      <p>Hi King! This is Ran, speaking to you from a remote app</p>
+
       <input type="text" value={item} onChange={(e) => setItem(e.target.value)} />
       <button onClick={handleCreate}>Submit</button>
 

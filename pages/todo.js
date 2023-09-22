@@ -19,10 +19,6 @@ export default function Todo() {
       </Head>
 
       <main>
-        <h1>
-          To-Do List
-        </h1>
-
         <ToDo />
       </main>
     </>
