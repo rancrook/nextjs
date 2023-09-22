@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@module-federation/nextjs-mf": "^7.0.8",
     "axios": "^1.4.0",
     "next": "latest",
     "pg": "^8.11.3",
