@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-function Item({ key, description, handleDelete }) {
+function Item({ description, handleDelete }) {
   return (
-    <li key={key} >
+    <li>
       {description}
       <button onClick={handleDelete}>
         ×
@@ -11,24 +11,40 @@ function Item({ key, description, handleDelete }) {
   )
 }
 
-export default function ToDo() {
-  const [key, setKey] = useState(0);
+export default function ToDo({
+  items = [],
+  handleCreate = () => Promise.resolve(),
+  handleDelete = () => Promise.resolve()
+}) {
+  const [key, setKey] = useState(items.length + 1);
   const [item, setItem] = useState('');
-  const [todoList, setTodoList] = useState([]);
+  const [todoList, setTodoList] = useState(items);
 
-  const handleCreate = () => {
+  const handleSubmit = () => {
     if (item === '') return;
 
-    setTodoList(todoList.concat({ id: key, description: item }));
-    setKey(key + 1);
-    setItem('');
-  }
+    handleCreate(item)
+      .then(() => {
+        setTodoList(todoList.concat({ id: key, description: item }));
+        setKey(key + 1);
+        setItem('');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-  const handleDelete = (id) => {
-    setTodoList(
-      todoList.filter((item) => id !== item.id)
-    );
-  }
+  const handleRemove = (id) => {
+    handleDelete(id)
+      .then(() => {
+        setTodoList(
+          todoList.filter((item) => id !== item.id)
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -39,7 +55,7 @@ export default function ToDo() {
       <p>Hi King! This is Ran, speaking to you from a remote app</p>
 
       <input type="text" value={item} onChange={(e) => setItem(e.target.value)} />
-      <button onClick={handleCreate}>Submit</button>
+      <button onClick={handleSubmit}>Submit</button>
 
       <ol>
         {
@@ -47,7 +63,7 @@ export default function ToDo() {
             <Item
               key={item.id}
               description={item.description}
-              handleDelete={() => handleDelete(item.id)}
+              handleDelete={() => handleRemove(item.id)}
             />
           ))
         }

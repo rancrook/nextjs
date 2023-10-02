@@ -1,15 +1,26 @@
 import axios from 'axios';
 import Head from 'next/head';
 import ToDo from '../components/ToDo';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Todo() {
+  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState([]);
+
   useEffect(() => {
     axios.get('/api/items')
       .then((response) => {
-        console.log(response.data);
+        setItems(response.data);
+        setLoading(false);
       })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
+
+  const handleCreate = (description) => axios.post('/api/items', { description });
+
+  const handleDelete = (id) => axios.delete('/api/items', { data: { id } });
 
   return (
     <>
@@ -19,7 +30,13 @@ export default function Todo() {
       </Head>
 
       <main>
-        <ToDo />
+        {!loading && (
+          <ToDo
+            items={items}
+            handleCreate={handleCreate}
+            handleDelete={handleDelete}
+          />
+        )}
       </main>
     </>
   )
